@@ -1,0 +1,4 @@
+default:
+  course:
+    provider: "Udemy Dev"
+    resultPerPage: 5

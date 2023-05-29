@@ -1,0 +1,8 @@
+spring:
+  application:
+    name: course-catalog-service
+
+default:
+  course:
+    provider: "Udemy Prod"
+    resultPerPage: 10

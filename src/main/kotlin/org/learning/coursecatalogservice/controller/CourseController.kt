@@ -15,4 +15,14 @@ class CourseController(val courseService: CourseService) {
     fun getAllCourses() : Iterable<CourseDto> {
         return courseService.getAllCourses()
     }
+
+    @GetMapping("/resultPerPage", produces = [APPLICATION_JSON_VALUE])
+    fun getResultPerPage() : Int {
+        return courseService.resultPerPage
+    }
+
+    @GetMapping("/courseProvider", produces = [APPLICATION_JSON_VALUE])
+    fun getCourseProvider() : String {
+        return courseService.courseProvider
+    }
 }
