@@ -18,7 +18,7 @@ class CourseService(@Value("\${default.course.provider}") var courseProvider: St
         }
         set(value) { field = value }
 
-    fun getAllCourses(): Iterable<CourseDto> {
+    fun getAllCourses(): Iterable<CourseDto?>? {
         logger.debug { "Getting all courses" }
 
         return listOf(

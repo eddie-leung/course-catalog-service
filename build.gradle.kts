@@ -33,6 +33,7 @@ dependencies {
     implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8")
 
     implementation("io.github.microutils:kotlin-logging-jvm:3.0.5")
+    testImplementation("org.junit.jupiter:junit-jupiter:5.8.1")
 
     compileOnly("org.projectlombok:lombok")
 
@@ -43,6 +44,7 @@ dependencies {
 //    runtimeOnly("org.postgresql:postgresql")
 
     testImplementation("org.springframework.boot:spring-boot-starter-test")
+    testImplementation("org.springframework.boot:spring-boot-starter-webflux")
 }
 
 tasks.withType<KotlinCompile> {
@@ -54,4 +56,12 @@ tasks.withType<KotlinCompile> {
 
 tasks.withType<Test> {
     useJUnitPlatform()
+}
+
+sourceSets {
+    test {
+        java {
+            srcDirs("src/test/unit", "src/test/integration")
+        }
+    }
 }
