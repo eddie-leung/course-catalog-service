@@ -6,6 +6,7 @@ import org.junit.jupiter.api.Assertions.*
 import org.junit.jupiter.api.Test
 import org.learning.coursecatalogservice.dto.CourseDto
 import org.learning.coursecatalogservice.entity.Course
+import org.learning.coursecatalogservice.exception.CourseNotFoundException
 import org.learning.coursecatalogservice.service.CourseService
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.autoconfigure.web.reactive.AutoConfigureWebTestClient
@@ -36,7 +37,7 @@ internal class CourseControllerUnitTest {
             Course(3, "Spring", "Spring course")
         )
 
-        givenCourses(coursesInDB)
+        givenCoursesInDB(coursesInDB)
 
         val actualResult = webTestClient.get()
             .uri(BASE_URL)
@@ -48,7 +49,75 @@ internal class CourseControllerUnitTest {
         assertEquals(expectedResults, actualResult.responseBody)
     }
 
-    private fun givenCourses(expectedResults : List<Course>) {
+    @Test
+    fun `should return empty list when no courses in the database`() {
+        val expectedResults = emptyList<CourseDto>()
+
+        val coursesInDB = emptyList<Course>()
+
+        givenCoursesInDB(coursesInDB)
+
+        val actualResult = webTestClient.get()
+            .uri(BASE_URL)
+            .exchange()
+            .expectStatus().isOk
+            .expectBodyList(CourseDto::class.java)
+            .returnResult()
+
+        assertEquals(expectedResults, actualResult.responseBody)
+    }
+
+    @Test
+    fun `should return course with given id`() {
+        val expectedResult = CourseDto(1, "Kotlin", "Kotlin course")
+
+        val courseInDB = Course(1, "Kotlin", "Kotlin course")
+
+        givenCourseInDB(courseInDB)
+
+        val actualResult = webTestClient.get()
+            .uri("$BASE_URL$FIND_BY_ID_PATH", expectedResult.id)
+            .exchange()
+            .expectStatus().isOk
+            .expectBody(CourseDto::class.java)
+            .returnResult()
+
+        assertEquals(expectedResult, actualResult.responseBody)
+    }
+
+    @Test
+    fun `should return 404 when course with given id not found`() {
+        givenCourseInDB(null)
+
+        webTestClient.get()
+            .uri("$BASE_URL$FIND_BY_ID_PATH", 2)
+            .exchange()
+            .expectStatus().isNotFound
+    }
+
+    @Test
+    fun `should return 404 when updating course and the given id is not found`() {
+        val courseDto = CourseDto(null, "Kotlin", "Kotlin course")
+        val courseId = 2
+
+        givenCourseNotFoundExceptionThrown(courseId)
+
+        webTestClient.put()
+            .uri("$BASE_URL$FIND_BY_ID_PATH", courseId)
+            .bodyValue(courseDto)
+            .exchange()
+            .expectStatus().isNotFound
+    }
+
+    private fun givenCourseNotFoundExceptionThrown(id : Int) {
+        every { courseService.updateCourse(any(), any()) } throws CourseNotFoundException("Course not found with id $id")
+    }
+
+    private fun givenCourseInDB(expectedResult : Course?) {
+        every { courseService.getCourseById(any()) } returns expectedResult
+    }
+
+    private fun givenCoursesInDB(expectedResults : List<Course>) {
         every { courseService.getAllCourses() } returns expectedResults
     }
 }

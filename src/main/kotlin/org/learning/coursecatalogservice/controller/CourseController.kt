@@ -1,6 +1,7 @@
 package org.learning.coursecatalogservice.controller
 
 import org.learning.coursecatalogservice.dto.CourseDto
+import org.learning.coursecatalogservice.exception.CourseNotFoundException
 import org.learning.coursecatalogservice.service.CourseService
 import org.learning.coursecatalogservice.service.toDto
 import org.learning.coursecatalogservice.service.toEntity
@@ -46,9 +47,12 @@ class CourseController(val courseService: CourseService) {
         produces = [APPLICATION_JSON_VALUE])
     fun updateCourse(@PathVariable id : Long,
                      @RequestBody courseDto : CourseDto) : ResponseEntity<CourseDto> {
-        return courseService.updateCourse(id, toEntity(courseDto))
-            ?.let { ok(toDto(it)) }
-            ?: notFound().build()
+        return try {
+            courseService.updateCourse(id, toEntity(courseDto))
+                .let { ok(toDto(it)) }
+        } catch (e : CourseNotFoundException) {
+            notFound().build()
+        }
     }
 
     @DeleteMapping(FIND_BY_ID_PATH)

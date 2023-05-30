@@ -30,7 +30,7 @@ class CourseService(@Value("\${default.course.provider}") var courseProvider: St
     fun getCourseById(id: Long): Course? = courseRepository.findById(id)
         .orElse(null)
 
-    fun updateCourse(id: Long, course: Course): Course? {
+    fun updateCourse(id: Long, course: Course): Course {
         return courseRepository.findById(id)
             .map {
                 it.name = course.name
