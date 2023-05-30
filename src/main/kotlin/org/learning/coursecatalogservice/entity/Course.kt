@@ -26,15 +26,6 @@ class Course(@Id
         return true
     }
 
-    fun equals(other: Course): Boolean {
-        if (this === other) return true
-        if (javaClass != other.javaClass) return false
-
-        if (id != other.id) return false
-
-        return true
-    }
-
     override fun hashCode(): Int {
         return id.hashCode()
     }
