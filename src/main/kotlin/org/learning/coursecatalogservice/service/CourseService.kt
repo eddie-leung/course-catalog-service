@@ -21,7 +21,11 @@ class CourseService(@Value("\${default.course.provider}") var courseProvider: St
         }
         set(value) { field = value }
 
-    fun getAllCourses(): Iterable<Course>? = courseRepository.findAll()
+    fun getAllCourses(category : String?): Iterable<Course>? {
+        return category?.run {
+            courseRepository.findByCategory(this)
+        } ?: courseRepository.findAll()
+    }
 
     fun createCourse(course: Course): Course {
         return courseRepository.save(course)

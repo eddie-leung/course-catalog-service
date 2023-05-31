@@ -1,6 +1,7 @@
-import org.junit.jupiter.api.Assertions.assertEquals
-import org.junit.jupiter.api.Assertions.assertNull
+import org.junit.jupiter.api.Assertions.*
 import org.junit.jupiter.api.Test
+import org.junit.jupiter.params.ParameterizedTest
+import org.junit.jupiter.params.provider.MethodSource
 import org.learning.coursecatalogservice.dto.CourseDto
 
 class QuickTest {
@@ -32,7 +33,21 @@ class QuickTest {
         }
     }
 
+    @ParameterizedTest
+    @MethodSource("strings")
+    fun `Test elvis operator and run`(input : String?) {
+        input?.run {
+            assertNotNull(input)
+        } ?: {
+            assertNull(input)
+            println("Input is null")
+        }
 
+    }
 
+    companion object {
+        @JvmStatic
+        fun strings() = listOf("Hello", "", " ", null)
+    }
 
 }

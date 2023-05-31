@@ -146,6 +146,6 @@ internal class CourseControllerUnitTest {
     }
 
     private fun givenCoursesInDB(expectedResults : List<Course>) {
-        every { courseService.getAllCourses() } returns expectedResults
+        every { courseService.getAllCourses(any()) } returns expectedResults
     }
 }

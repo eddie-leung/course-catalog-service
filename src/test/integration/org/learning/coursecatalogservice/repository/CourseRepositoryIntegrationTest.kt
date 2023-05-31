@@ -14,7 +14,7 @@ import org.springframework.test.context.ActiveProfiles
 import java.util.stream.Stream
 
 @DataJpaTest
-@ActiveProfiles("integration-test")
+@ActiveProfiles("integration")
 class CourseRepositoryIntegrationTest {
 
     @Autowired

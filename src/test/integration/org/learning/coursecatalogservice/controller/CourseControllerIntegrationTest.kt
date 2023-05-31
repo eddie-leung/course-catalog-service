@@ -3,6 +3,8 @@ package org.learning.coursecatalogservice.controller
 import org.junit.jupiter.api.Assertions.*
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
+import org.junit.jupiter.params.ParameterizedTest
+import org.junit.jupiter.params.provider.MethodSource
 import org.learning.coursecatalogservice.dto.CourseDto
 import org.learning.coursecatalogservice.repository.CourseRepository
 import org.learning.coursecatalogservice.utils.courses
@@ -14,9 +16,10 @@ import org.springframework.test.annotation.DirtiesContext
 import org.springframework.test.annotation.DirtiesContext.ClassMode.AFTER_EACH_TEST_METHOD
 import org.springframework.test.context.ActiveProfiles
 import org.springframework.test.web.reactive.server.WebTestClient
+import org.springframework.web.util.UriComponentsBuilder
 
 @SpringBootTest(webEnvironment = RANDOM_PORT)
-@ActiveProfiles("integration-test")
+@ActiveProfiles("integration")
 @AutoConfigureWebTestClient
 @DirtiesContext(classMode = AFTER_EACH_TEST_METHOD)
 internal class CourseControllerIntegrationTest {
@@ -93,29 +96,46 @@ internal class CourseControllerIntegrationTest {
         assertEquals("Programming", actualResult.responseBody?.category)
     }
 
-    @Test
-    fun `should return all courses in the database`() {
+    @ParameterizedTest(name = "should return course by name - {0}")
+    @MethodSource("categories")
+    fun `should return all courses in the database`(category : String?, expectedResult : List<CourseDto?>) {
+
+        val builder = UriComponentsBuilder.fromUriString(BASE_URL)
+
+        val uri = category?.run{
+            builder.queryParam("category", category).toUriString()
+        } ?: builder.toUriString()
+
         val actualResult = webTestClient.get()
-            .uri(BASE_URL)
+            .uri(uri)
             .exchange()
             .expectStatus().isOk
             .expectBodyList(CourseDto::class.java)
             .returnResult()
 
         // Approach 1 - relies on the equals method of the CourseDto class
-        assertEquals(listOf(
-            CourseDto(1, "Kotlin", "Programming"),
-            CourseDto(2, "Java", "Programming"),
-            CourseDto(3, "Spring", "Framework")),
+        assertEquals(expectedResult,
             actualResult.responseBody)
 
         // Approach 2 - allows us to verify selected field of the CourseDto class
-        verifyCourseDtos(listOf(
-            CourseDto(1, "Kotlin", "Programming"),
-            CourseDto(2, "Java", "Programming"),
-            CourseDto(3, "Spring", "Framework")),
-            actualResult.responseBody)
+        verifyCourseDtos(expectedResult, actualResult.responseBody)
 
+    }
+
+    companion object {
+        @JvmStatic
+        fun categories() = listOf(
+            arrayOf(null, listOf(
+                CourseDto(1, "Kotlin", "Programming"),
+                CourseDto(2, "Java", "Programming"),
+                CourseDto(3, "Spring", "Framework"))),
+            arrayOf("Programming", listOf(
+                CourseDto(1, "Kotlin", "Programming"),
+                CourseDto(2, "Java", "Programming"))),
+            arrayOf("Framework", listOf(
+                CourseDto(3, "Spring", "Framework"))),
+            arrayOf("programming", emptyList<CourseDto>())
+        )
     }
 
     private fun verifyCourseDtos(expectedResult : List<CourseDto?>, actualResult : List<CourseDto?>?) {
@@ -132,7 +152,7 @@ internal class CourseControllerIntegrationTest {
             assertEquals(id, actualResult?.id)
             assertEquals(name, actualResult?.name)
             assertEquals(category, actualResult?.category)
-        } ?: run {
+        } ?: {
             assertNull(actualResult)
         }
     }

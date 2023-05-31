@@ -24,11 +24,11 @@ const val FIND_BY_ID_PATH = "/{id}"
 class CourseController(val courseService: CourseService) {
 
     @GetMapping(produces = [APPLICATION_JSON_VALUE])
-    fun getAllCourses() : Iterable<CourseDto?>? {
+    fun getAllCourses(@RequestParam(required = false) category : String?) : Iterable<CourseDto?>? {
         logWithContext({ "Eddie" }, { "Getting all courses" })
         logWithContext("Eddie2", { "Getting all courses" })
 
-        return courseService.getAllCourses()?.map { toDto(it) }
+        return courseService.getAllCourses(category)?.map { toDto(it) }
     }
 
     @GetMapping(FIND_BY_ID_PATH, produces = [APPLICATION_JSON_VALUE])
