@@ -11,12 +11,12 @@ class QuickTest {
             CourseDto(1, "Kotlin", "Kotlin course"),
             CourseDto(2, "Java", "Java course"),
             null,
-            CourseDto(3, "Spring", "Spring course"))
+            CourseDto(3, "Spring", "Framework"))
 
         val actualResult = listOf(CourseDto(1, "Kotlin", "Kotlin course"),
             CourseDto(2, "Java", "Java course"),
             null,
-            CourseDto(3, "Spring", "Spring course"))
+            CourseDto(3, "Spring", "Framework"))
 
         expectedResult.forEachIndexed { index, expected ->
             expected?.run {

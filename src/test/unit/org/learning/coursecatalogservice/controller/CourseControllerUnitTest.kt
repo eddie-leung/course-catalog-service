@@ -28,13 +28,13 @@ internal class CourseControllerUnitTest {
         val expectedResults = listOf(
             CourseDto(1, "Kotlin", "Kotlin course"),
             CourseDto(2, "Java", "Java course"),
-            CourseDto(3, "Spring", "Spring course")
+            CourseDto(3, "Spring", "Framework")
         )
 
         val coursesInDB = listOf(
             Course(1, "Kotlin", "Kotlin course"),
             Course(2, "Java", "Java course"),
-            Course(3, "Spring", "Spring course")
+            Course(3, "Spring", "Framework")
         )
 
         givenCoursesInDB(coursesInDB)

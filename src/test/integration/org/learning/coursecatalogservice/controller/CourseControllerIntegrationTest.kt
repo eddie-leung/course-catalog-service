@@ -90,7 +90,7 @@ internal class CourseControllerIntegrationTest {
 
         assertEquals(1, actualResult.responseBody?.id)
         assertEquals("Kotlin", actualResult.responseBody?.name)
-        assertEquals("Kotlin course", actualResult.responseBody?.category)
+        assertEquals("Programming", actualResult.responseBody?.category)
     }
 
     @Test
@@ -104,16 +104,16 @@ internal class CourseControllerIntegrationTest {
 
         // Approach 1 - relies on the equals method of the CourseDto class
         assertEquals(listOf(
-            CourseDto(1, "Kotlin", "Kotlin course"),
-            CourseDto(2, "Java", "Java course"),
-            CourseDto(3, "Spring", "Spring course")),
+            CourseDto(1, "Kotlin", "Programming"),
+            CourseDto(2, "Java", "Programming"),
+            CourseDto(3, "Spring", "Framework")),
             actualResult.responseBody)
 
         // Approach 2 - allows us to verify selected field of the CourseDto class
         verifyCourseDtos(listOf(
-            CourseDto(1, "Kotlin", "Kotlin course"),
-            CourseDto(2, "Java", "Java course"),
-            CourseDto(3, "Spring", "Spring course")),
+            CourseDto(1, "Kotlin", "Programming"),
+            CourseDto(2, "Java", "Programming"),
+            CourseDto(3, "Spring", "Framework")),
             actualResult.responseBody)
 
     }

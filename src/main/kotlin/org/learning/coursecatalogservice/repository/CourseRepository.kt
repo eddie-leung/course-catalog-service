@@ -5,4 +5,9 @@ import org.springframework.data.repository.CrudRepository
 import org.springframework.stereotype.Repository
 
 @Repository
-interface CourseRepository : CrudRepository<Course, Long>
+interface CourseRepository : CrudRepository<Course, Long> {
+
+    fun findByName(name: String): Course?
+
+    fun findByCategory(category: String): List<Course>
+}
