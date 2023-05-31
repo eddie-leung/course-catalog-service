@@ -1,5 +1,6 @@
 package org.learning.coursecatalogservice.controller
 
+import jakarta.validation.Valid
 import org.learning.coursecatalogservice.dto.CourseDto
 import org.learning.coursecatalogservice.exception.CourseNotFoundException
 import org.learning.coursecatalogservice.service.CourseService
@@ -10,6 +11,7 @@ import org.springframework.http.MediaType.APPLICATION_JSON_VALUE
 import org.springframework.http.ResponseEntity
 import org.springframework.http.ResponseEntity.notFound
 import org.springframework.http.ResponseEntity.ok
+import org.springframework.validation.annotation.Validated
 import org.springframework.web.bind.annotation.*
 import org.springframework.web.util.UriComponentsBuilder
 
@@ -18,6 +20,7 @@ const val FIND_BY_ID_PATH = "/{id}"
 
 @RestController
 @RequestMapping(BASE_URL)
+@Validated
 class CourseController(val courseService: CourseService) {
 
     @GetMapping(produces = [APPLICATION_JSON_VALUE])
@@ -35,7 +38,7 @@ class CourseController(val courseService: CourseService) {
 
     @PostMapping(consumes = [APPLICATION_JSON_VALUE],
         produces = [APPLICATION_JSON_VALUE])
-    fun createCourse(@RequestBody courseDto : CourseDto,
+    fun createCourse(@Valid @RequestBody courseDto : CourseDto,
                      builder : UriComponentsBuilder) : ResponseEntity<CourseDto> {
         val savedCourse = courseService.createCourse(toEntity(courseDto))
         return ResponseEntity

@@ -8,5 +8,5 @@ fun toDto(course: Course): CourseDto = course.run {
 }
 
 fun toEntity(courseDto: CourseDto): Course = courseDto.run {
-    Course(id, courseName, category)
+    Course(id, name, category)
 }

@@ -22,7 +22,7 @@ class QuickTest {
             expected?.run {
                 println("Expected is not null at index $index")
                 assertEquals(id, actualResult[index]?.id)
-                assertEquals(courseName, actualResult[index]?.courseName)
+                assertEquals(name, actualResult[index]?.name)
                 assertEquals(category, actualResult[index]?.category)
             } ?: run {
                 println("Expected is null at index $index")

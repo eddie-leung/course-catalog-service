@@ -59,7 +59,7 @@ internal class CourseControllerIntegrationTest {
             .returnResult()
 
         assertEquals(1, actualResult.responseBody?.id)
-        assertEquals(courseDto.courseName, actualResult.responseBody?.courseName)
+        assertEquals(courseDto.name, actualResult.responseBody?.name)
         assertEquals(courseDto.category, actualResult.responseBody?.category)
     }
 
@@ -75,7 +75,7 @@ internal class CourseControllerIntegrationTest {
             .returnResult()
 
         assertNotNull(actualResult.responseBody?.id)
-        assertEquals(courseDto.courseName, actualResult.responseBody?.courseName)
+        assertEquals(courseDto.name, actualResult.responseBody?.name)
         assertEquals(courseDto.category, actualResult.responseBody?.category)
     }
 
@@ -89,7 +89,7 @@ internal class CourseControllerIntegrationTest {
             .returnResult()
 
         assertEquals(1, actualResult.responseBody?.id)
-        assertEquals("Kotlin", actualResult.responseBody?.courseName)
+        assertEquals("Kotlin", actualResult.responseBody?.name)
         assertEquals("Kotlin course", actualResult.responseBody?.category)
     }
 
@@ -130,7 +130,7 @@ internal class CourseControllerIntegrationTest {
     private fun verifyCourseDto(expectedResult : CourseDto?, actualResult : CourseDto?) {
         expectedResult?.run {
             assertEquals(id, actualResult?.id)
-            assertEquals(courseName, actualResult?.courseName)
+            assertEquals(name, actualResult?.name)
             assertEquals(category, actualResult?.category)
         } ?: run {
             assertNull(actualResult)

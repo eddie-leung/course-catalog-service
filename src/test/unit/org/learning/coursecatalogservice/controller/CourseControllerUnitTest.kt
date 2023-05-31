@@ -109,6 +109,34 @@ internal class CourseControllerUnitTest {
             .expectStatus().isNotFound
     }
 
+    @Test
+    fun `should return 400 when creating course with blank name`() {
+        val courseDto = CourseDto(null, "", "Kotlin course")
+
+        val actualResult = webTestClient.post()
+            .uri(BASE_URL)
+            .bodyValue(courseDto)
+            .exchange()
+            .expectStatus().isBadRequest
+            .expectBody(String::class.java)
+            .returnResult().responseBody
+
+        assertEquals("CourseDto.name cannot be blank", actualResult)
+    }
+
+    @Test
+    fun `should return 500 when RuntimeException is thrown`() {
+        val courseDto = CourseDto(null, "Kotlin", "Kotlin course")
+
+        every { courseService.createCourse(any()) } throws RuntimeException("Something went wrong")
+
+        webTestClient.post()
+            .uri(BASE_URL)
+            .bodyValue(courseDto)
+            .exchange()
+            .expectStatus().is5xxServerError
+    }
+
     private fun givenCourseNotFoundExceptionThrown(id : Int) {
         every { courseService.updateCourse(any(), any()) } throws CourseNotFoundException("Course not found with id $id")
     }
