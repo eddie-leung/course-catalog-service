@@ -1,6 +1,16 @@
 spring:
   application:
     name: course-catalog-service
+  datasource:
+    url: jdbc:postgresql://localhost:5438/course-catalog-db
+    driver-class-name: org.postgresql.Driver
+    username: postgresql
+    password: password
+  jpa:
+    database: postgresql
+    database-platform: org.hibernate.dialect.PostgreSQLDialect
+#    generate-ddl: true
+    show-sql: true
 
 default:
   course:

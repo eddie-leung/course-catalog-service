@@ -1,0 +1,13 @@
+version: '3.1'
+services:
+    # Postgres
+    postgres:
+        image: postgres:latest
+        ports:
+        - "5438:5432"
+        environment:
+        - POSTGRES_USER=postgresql
+        - POSTGRES_PASSWORD=password
+        - POSTGRES_DB=course-catalog-db
+        volumes:
+            - ./data:/docker-entrypoint-initdb.d
